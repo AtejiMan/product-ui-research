@@ -125,6 +125,35 @@ Impeccable의 source detector와 URL/browser detector는 검사 범위가 다르
 
 이것은 서로 다른 과제·모델·평가 조건의 결과다. **시각적 미감·실제 제품의 정보 위계·사용자 만족도를 직접 비교한 종합 디자인 평가가 아니며, '정확히 세 개만 설치하면 최적'이라는 법칙도 아니다.** 공개 연구를 근거로 해당 프로젝트에서 스킬을 어떻게 사용했는지 추적해야 한다.
 
+## 7. 지금 살펴본 UI 스킬·검사 도구와 채택 판단
+
+인기나 설치 수는 실제 제품의 UX 개선 효과를 대신하지 않는다. 아래는 현행 소스에서 확인한 기능과 이 작업에 대한 판단이다. 전부 설치하라는 조합이 아니다.
+
+| 도구 | 실제로 하는 일 | 현재 판단 |
+| --- | --- | --- |
+| **Impeccable** | `critique`의 모델 기반 UX 검토, `detect`의 실행 가능한 소스·URL 검사, 편집 hook. Operate 모드는 업무용 앱의 밀도·익숙한 조작·일관성·비장식적 움직임을 다룸 | 이미 도입했다면 유지. 발동·맥락·검사 연결부터 점검. 단순 미감 프롬프트만 있는 도구로 평가하면 부정확함 |
+| **Vercel web-design-guidelines** | 최신 지침을 가져와 코드를 읽고 파일·행 단위로 위반을 보고하도록 하는 스킬 | 코드 리뷰 참고용. 설치만으로 실행되는 결정론적 linter나 브라우저 검사가 아님 |
+| **UI UX Pro Max** | 스타일·색·폰트·업종·스택 지식 검색, 디자인 시스템 제안 | 초기 방향 탐색용. 렌더된 화면의 기능·상호작용 검사 대체재가 아니므로 기존 시스템 위에 기본 추가하지 않음 |
+| **Hallmark** | 실제 `sloplint`와 렌더 검사, 모델 기반 별도 리뷰를 포함 | 실제 검사기가 있다는 점은 인정. 그러나 현행 Floor 10의 가운데점 메타문자열 금지처럼 강한 일괄 규칙이 있어, 상황별 판단을 원하는 이 요청에는 기본 선택으로 부적합 |
+| **AccessLint** | 실제 렌더된 페이지의 접근성 검사, MCP·CLI와 기준 대비 변경 검토 | 접근성 자동화가 없는 프로젝트에 유용. 이미 axe·브라우저 검사가 있다면 중복 여부부터 확인. 의미상의 정보 우선순위·성능을 모두 해결하지 않음 |
+| **React Doctor** | React 상태·효과·구조·성능 코드 검사와 CI. `scan <url>`은 Chrome trace 기반 상호작용 성능 분석 | React 앱의 버벅임 원인 분석에 별도 후보. 기본 디자인 스킬과 역할이 다름. 비React 앱 전체를 검사하는 만능 도구는 아님 |
+
+공개 소스: [Impeccable Operate](https://github.com/pbakaus/impeccable/blob/414603bf14c7a344edb466bb1f85690c77ce8b7d/.agents/skills/impeccable/reference/operate.md), [Vercel 스킬](https://github.com/vercel-labs/agent-skills/blob/1a2c79d4e6c4a2283dc2c614b6538cbe1ed5ca62/skills/web-design-guidelines/SKILL.md), [UI UX Pro Max](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill/blob/b7d5353e0130feb8c5574ef1251f8a1db1873ccb/README.md), [Hallmark 현행 규칙](https://github.com/Nutlope/hallmark/blob/407fa689f4a276f2fd389208d271d0fef08f5058/skills/hallmark/SKILL.md), [AccessLint MCP](https://github.com/AccessLint/accesslint/blob/a839ea727447410e8282c3d1da83fc893b42901a/mcp/README.md), [React Doctor](https://github.com/millionco/react-doctor).
+
+### 점검 범위를 실제 실패에 연결하기
+
+- **사용자 화면에 내부 로그·필드를 그대로 나열:** 의미와 업무 목적을 아는 리뷰가 필요하다. 원시 응답을 그대로 렌더하지 않고 사용자용 요약·상태·상세·진단 필드로 나누는 구현이 필요하며, detector만으로 모든 의미상의 오류를 찾는다고 보장하지 않는다.
+- **정보가 모두 같은 강조 수준, 불필요한 버튼, 잘못된 묶음:** 모델 기반 critique와 공통 화면 템플릿의 역할이다. 폰트 크기 차이만 검사하는 규칙은 정보 중요도의 옳고 그름까지 판정하지 못한다.
+- **넘침·가림·대비·작은 클릭 영역:** 실행된 페이지의 브라우저 검사와 접근성 검사에 연결한다.
+- **갱신 후 스크롤·포커스·입력·선택 상태 손실:** 실제 업무 중 갱신을 발생시키는 브라우저 회귀 테스트에서 확인한다. 스크린샷 한 장이나 정적 코드 검사만으로 통과 처리하지 않는다.
+- **메뉴를 바꿀 때 단계적으로 버벅임:** 실제 상호작용 trace로 긴 프레임·긴 작업·재렌더·레이아웃 변경을 구분한다. 원인 측정 전 모든 애니메이션이나 React 자체를 원인으로 단정하지 않는다.
+
+Impeccable hook이 검사 결과를 에이전트에 전달하는 것과 CI가 병합을 차단하는 것은 별개다. 또한 수동 `critique` 기본 흐름에는 소유자에게 우선순위를 묻는 절차가 있어, 그것을 그대로 매 변경의 사용자 승인 절차로 확대하면 이 요청의 목적과 어긋난다. 보통의 구현·검사·수정 책임은 개발 작업에 포함하고, 제품 목적이 실제로 모호할 때만 결정이 필요한 질문을 한다.
+
+React Doctor의 runtime scan은 실제 상호작용과 interactive TTY를 요구하므로 모든 사용자 동작을 스스로 재현하는 무인 회귀 테스트와 다르다. trace는 로컬에 남는다고 설명하지만 CLI telemetry는 기본 켜져 있으며 `--no-telemetry`로 끌 수 있다. 실제 LICENSE는 **Modified MIT**로, 일반적인 앱 검사 외에 ML/AI 훈련·개선·평가용 데이터/파이프라인 활용 및 해당 소프트웨어를 기반으로 하는 유료 재판매 등에 추가 허가 조항이 있다. README의 MIT 표기만 보고 무제한 MIT라고 설명하지 않는다.
+
+근거: [runtime trace CLI](https://www.react.doctor/docs/reference/cli-reference#runtime-performance-traces), [실제 라이선스](https://github.com/millionco/react-doctor/blob/9791c32f61fb1477a4f8dd596ff80184ad26b2e3/LICENSE).
+
 ## 적용 방향
 
 - 이미 선택한 정상적인 UI 컴포넌트와 업무 동작을 보존한다.
