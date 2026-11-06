@@ -19,6 +19,7 @@
 | 문서 | 내용 |
 | --- | --- |
 | [현재 추천과 시안 링크](research/2026-11-06-template-choice.md) | 한 템플릿으로 채택할 대상, 직접 확인한 화면과 동작, 이전 추천 수정, 설계 문서의 의존 관계 |
+| [무료 여부와 기본 UX 실패 방지](research/2026-11-06-cost-ux-patterns.md) | MIT 비용 조건, 로그 나열·시각적 위계·과밀 화면의 UX 명칭, 개발자가 검증할 화면 계약, 관리 외의 기본형 |
 | [첫 결론과 적용 방향](research/2026-11-06-decision.md) | 초기 조사 기록. 현재 템플릿 선택은 위 문서가 대체함 |
 | [완성된 관리 UI 비교](research/framework-evidence.md) | React-admin/Atomic CRM, Refine, Ant Design Pro, Cloudscape의 실제 코드·상태 처리·라이선스·한계 |
 | [설계에서 구현까지의 과정 비교](research/process-evidence.md) | Design OS, Superdesign, Agent OS, OOUX/ORCA의 산출물·사용자 개입·검증 범위 |
