@@ -1,5 +1,7 @@
 # Finished React admin workflows: adoption evidence
 
+> **Recommendation update, same day:** The later requirement prioritizes a single complete application template for development, with predefined page types. The current recommendation is Ant Design Pro **full**, with the complete React-admin E-commerce example as the alternative. See [the visual template decision](2026-11-06-template-choice.md). The source findings below remain evidence; the earlier Atomic CRM transplantation recommendation is historical.
+
 **Checked:** 2026-11-06 (Asia/Seoul)  
 **Scope:** public official documentation and public source code only. This review reports source inspection; the candidates were not installed, implemented, purchased, deployed, or benchmarked against a target product.
 
